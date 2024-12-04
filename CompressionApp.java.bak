@@ -1,0 +1,146 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+public class CompressionApp extends JFrame
+{
+    private JTextField filePathField;
+    private JComboBox<String> algorithmComboBox;
+    private JTextArea infoArea;
+
+    public CompressionApp()
+    {
+        setTitle("Compression/Decompression App");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+
+        setLayout(new BorderLayout());
+
+        // File Selector
+        JPanel filePanel = new JPanel(new BorderLayout());
+        filePathField = new JTextField();
+        JButton browseButton = new JButton("Browse");
+        browseButton.addActionListener(new BrowseButtonListener());
+        filePanel.add(filePathField, BorderLayout.CENTER);
+        filePanel.add(browseButton, BorderLayout.EAST);
+
+        // Algorithm Selector
+        JPanel algorithmPanel = new JPanel(new GridLayout(1, 2));
+        algorithmComboBox = new JComboBox<>(new String[]{
+            "ZIP", "7z", "zstd", "Gzip", "Bzip2", "Brotli", "xz"
+        });
+        infoArea = new JTextArea();
+        infoArea.setEditable(false);
+        JScrollPane infoScrollPane = new JScrollPane(infoArea);
+        algorithmPanel.add(algorithmComboBox);
+        algorithmPanel.add(infoScrollPane);
+
+        // Buttons
+        JPanel buttonPanel = new JPanel();
+        JButton compressButton = new JButton("Compress");
+        compressButton.addActionListener(new CompressButtonListener());
+        JButton decompressButton = new JButton("Decompress");
+        decompressButton.addActionListener(new DecompressButtonListener());
+        buttonPanel.add(compressButton);
+        buttonPanel.add(decompressButton);
+
+        // Layout
+        add(filePanel, BorderLayout.NORTH);
+        add(algorithmPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        // Populate info area
+        updateInfoArea();
+    }
+
+    private void updateInfoArea()
+    {
+        String algorithm = (String) algorithmComboBox.getSelectedItem();
+        switch (algorithm)
+        {
+            case "ZIP":
+                infoArea.setText("Algorithm: ZIP\nCompression Ratio: Medium\nCompression Speed: Fast\nDecompression Speed: Fast\nUse Case: General-purpose");
+                break;
+            case "7z":
+                infoArea.setText("Algorithm: 7z\nCompression Ratio: High\nCompression Speed: Medium\nDecompression Speed: Medium\nUse Case: Large files, archives");
+                break;
+            case "zstd":
+                infoArea.setText("Algorithm: Zstd\nCompression Ratio: Medium-High\nCompression Speed: Very Fast\nDecompression Speed: Very Fast\nUse Case: Real-time compression");
+                break;
+            case "Gzip":
+                infoArea.setText("Algorithm: Gzip\nCompression Ratio: Medium\nCompression Speed: Fast\nDecompression Speed: Fast\nUse Case: Web assets, Unix systems");
+                break;
+            case "Bzip2":
+                infoArea.setText("Algorithm: Bzip2\nCompression Ratio: High\nCompression Speed: Slow\nDecompression Speed: Medium\nUse Case: Large files, archival");
+                break;
+            case "Brotli":
+                infoArea.setText("Algorithm: Brotli\nCompression Ratio: High\nCompression Speed: Medium\nDecompression Speed: Fast\nUse Case: Web-related compression");
+                break;
+            case "xz":
+                infoArea.setText("Algorithm: XZ\nCompression Ratio: Very High\nCompression Speed: Slow\nDecompression Speed: Medium\nUse Case: Long-term archival");
+                break;
+        }
+    }
+
+    private class BrowseButtonListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(CompressionApp.this);
+            if (result == JFileChooser.APPROVE_OPTION)
+            {
+                File selectedFile = fileChooser.getSelectedFile();
+                filePathField.setText(selectedFile.getAbsolutePath());
+            }
+        }
+    }
+
+    private class CompressButtonListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            // Handle compression
+            String filePath = filePathField.getText();
+            String algorithm = (String) algorithmComboBox.getSelectedItem();
+            if (filePath.isEmpty())
+            {
+                JOptionPane.showMessageDialog(CompressionApp.this, "Please select a file!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            JOptionPane.showMessageDialog(CompressionApp.this, "Compression with " + algorithm + " is not implemented yet.");
+        }
+    }
+
+    private class DecompressButtonListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            // Handle decompression
+            String filePath = filePathField.getText();
+            String algorithm = (String) algorithmComboBox.getSelectedItem();
+            if (filePath.isEmpty())
+            {
+                JOptionPane.showMessageDialog(CompressionApp.this, "Please select a file!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            JOptionPane.showMessageDialog(CompressionApp.this, "Decompression with " + algorithm + " is not implemented yet.");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(() -> {
+            CompressionApp app = new CompressionApp();
+            app.setVisible(true);
+        });
+    }
+}
